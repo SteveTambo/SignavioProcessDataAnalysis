@@ -1,0 +1,34 @@
+﻿1. How many T-shirt orders have been canceled after they got an individual print? 
+
+
+SELECT COUNT(CASE_ID) AS "Number of Cancelled Orders"
+FROM THIS_PROCESS
+WHERE 
+event_name MATCHES (
+^ 'Receive Customer Order'-> 'Receive Payment'-> 'Send T-shirt to Printing'-> 'T-shirt Printed'->'Receive T-shirt from Printing'-> 'Order Canceled'
+)
+
+
+2. BONUS: What's their share compared to all cases in percent? 
+
+
+SELECT COUNT(CASE_ID)/877*100 AS "Number of Cancelled Orders"
+FROM THIS_PROCESS
+WHERE 
+event_name MATCHES (
+^ 'Receive Customer Order'-> 'Receive Payment'-> 'Send T-shirt to Printing'-> 'T-shirt Printed'->'Receive T-shirt from Printing'-> 'Order Canceled'
+)
+
+
+3. BONUS: What percentage of cases follow the standard process? 
+      1. (Order, Payment, (Printing), Shipping, Confirmation) 
+
+
+SELECT COUNT("CASE_ID")/877*100 AS "Percentage of Standard Process Cases", "event_name","Customer Type"
+FROM THIS_PROCESS
+WHERE 
+
+
+event_name MATCHES (
+^ 'Receive Customer Order'-> 'Receive Payment'-> 'Send T-shirt to Printing'-> 'T-shirt Printed'->'Receive T-shirt from Printing'-> 'Ship Goods Standard'-> 'Receive Delivery Confirmation'
+)
