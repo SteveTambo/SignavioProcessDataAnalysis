@@ -1,0 +1,35 @@
+﻿1. Average cycle time
+
+
+SELECT AVG((SELECT LAST(END_TIME) - FIRST(END_TIME))) AS "Cycle time"
+FROM THIS_PROCESS
+
+
+2. Top 5 cases with low cycle time
+
+
+SELECT (SELECT LAST(END_TIME) - FIRST(END_TIME)) AS "Cycle time", CASE_ID AS "Case ID",
+"Customer Type",
+"City"
+FROM THIS_PROCESS
+ORDER BY 1 ASC
+LIMIT 5
+
+
+3. Average duration for printing? 
+
+
+SELECT AVG((SELECT LAST(END_TIME) - FIRST(END_TIME))) AS "Cycle time"
+FROM THIS_PROCESS
+WHERE 
+event_name MATCHES (
+^ 'Receive Customer Order'-> 'Receive Payment'-> 'Send T-shirt to Printing'-> 'T-shirt Printed'->'Receive T-shirt from Printing'
+)
+
+
+4. Percentage of cases  above the Target cycle time of 10 days
+
+
+SELECT COUNT (CASE_ID)/877*100 AS "Percentage of Cases Above Cycle Time"
+FROM THIS_PROCESS
+WHERE (SELECT LAST (END_TIME) - FIRST (END_TIME)) > DURATION '10days'
