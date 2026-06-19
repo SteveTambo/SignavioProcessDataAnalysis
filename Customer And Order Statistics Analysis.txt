@@ -1,0 +1,38 @@
+﻿1. Total order amount of all cases 
+
+
+SELECT SUM("Order Amount in EUR") AS "Order Amount in EUR"
+FROM THIS_PROCESS
+
+
+2. Average order amount of all cases
+
+
+SELECT AVG("Order Amount in EUR") AS "Order Amount in EUR"
+FROM THIS_PROCESS
+LIMIT 500
+
+
+3. Average order amount from standard customers
+
+
+SELECT AVG("Order Amount in EUR") AS "Order Amount in EUR", "Customer Type"
+FROM THIS_PROCESS
+WHERE"Customer Type" ='Standard'
+
+
+4. City with the most orders, split by Type of Goods
+
+
+SELECT "Cases", "Type of Goods", "City"
+FROM (SELECT "Cases", DENSE_RANK() OVER (ORDER BY COALESCE("sum", 0) DESC, "Type of Goods" DESC) AS "DENSE_RANK", "sum", "Type of Goods", "City"
+FROM (SELECT "Type of Goods", "City", COUNT(CASE_ID) AS "Cases", SUM(COUNT(CASE_ID)) OVER (PARTITION BY "Type of Goods") AS "sum"
+FROM THIS_PROCESS) AS SUB) AS SUB1
+WHERE "DENSE_RANK" <= 500
+
+
+5. Number of customers that have placed an order
+
+
+SELECT COUNT(DISTINCT "Customer ID") AS "Customer ID"
+FROM THIS_PROCESS
