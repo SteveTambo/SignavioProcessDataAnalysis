@@ -1,0 +1,8 @@
+﻿1. Top 5 customers (customer ID’s) and their average order amount
+
+
+SELECT AVG("Order Amount in EUR") AS "Order Amount in EUR", "Customer ID",
+"Customer Type"
+FROM THIS_PROCESS
+ORDER BY 1 DESC
+LIMIT 5
